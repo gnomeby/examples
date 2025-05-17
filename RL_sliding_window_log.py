@@ -5,13 +5,12 @@ import unittest
 ONE_SECOND = 1
 
 
-class LeakyBucket:
-    def __init__(self, volume: int = 10, rate_per_sec: int = 1):
-        self.volume = volume
+class SlidingWindowLog:
+    def __init__(self, rate_per_sec: int = 1):
         self.rate_per_sec = rate_per_sec
         self.ts = []
 
-        print("SYSTEM: Init volume=%s, rate_per_sec=%s" % (volume, rate_per_sec))
+        print("SYSTEM: Init rate_per_sec=%s" % (rate_per_sec,))
 
     def get(self, name: str = "") -> bool:
         # Autocleanup
@@ -26,9 +25,9 @@ class LeakyBucket:
         return False
 
 
-class TestLeakyBucket(unittest.TestCase):
+class TestSlidingWindowLog(unittest.TestCase):
     def setUp(self):
-        self.tb = LeakyBucket(volume=10, rate_per_sec=5)
+        self.tb = SlidingWindowLog(rate_per_sec=5)
 
     def test_full_volume(self):
         for i in range(5):
@@ -51,6 +50,6 @@ class TestLeakyBucket(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    print("Leaky bucket example")
+    print("Sliding Window Log example")
 
     unittest.main()
