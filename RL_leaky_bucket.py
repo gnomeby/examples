@@ -70,7 +70,7 @@ class TestLeakyBucket(unittest.TestCase):
         self.assertEqual(self.tb.get_status("5"), "wait")
         self.assertEqual(self.tb.get_status("6"), "reject")
 
-        time.sleep(1.1)
+        time.sleep(ONE_SECOND + 0.1)
         self.assertEqual(self.tb.get_status("2"), "ready")
         self.assertEqual(self.tb.get_status("3"), "wait")
         self.assertEqual(self.tb.get_status("4"), "wait")

@@ -56,7 +56,7 @@ class TestFixedWindowCounter(unittest.TestCase):
 
     def test_waiting(self):
         self.tb.clean()
-        time.sleep(ONE_SECOND)
+        time.sleep(ONE_SECOND + 0.1)
         for i in range(10):
             self.assertTrue(self.tb.get(str(i)))
 
