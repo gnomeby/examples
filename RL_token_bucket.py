@@ -37,9 +37,8 @@ class TokenBucket:
         print("SYSTEM: Autoincrement tokens daemon started")
         while not self.th_stop:
             time.sleep(ONE_SECOND)
-            if self.current_volume < self.volume:
-                self.current_volume += self.rate_per_sec
-                print("SYSTEM: Added token")
+            self.current_volume = min(self.current_volume + self.rate_per_sec, self.volume)
+            print("SYSTEM: Added tokens")
         print("SYSTEM: Autoincrement tokens daemon stopped")
 
 
@@ -59,10 +58,23 @@ class TestTokenBucket(unittest.TestCase):
 
     def test_waiting(self):
         self.tb.clean()
-        time.sleep(ONE_SECOND)
+        time.sleep(ONE_SECOND + 0.1)
         self.assertTrue(self.tb.get("11"))
         self.assertFalse(self.tb.get("12"))
 
+class TestTokenBucket(unittest.TestCase):
+    def setUp(self):
+        self.tb = TokenBucket(volume=2, rate_per_sec=2)
+
+    def tearDown(self):
+        self.tb.close()
+
+    def test_overflow(self):
+        self.assertTrue(self.tb.get("1"))
+        time.sleep(ONE_SECOND + 0.1)
+        self.assertTrue(self.tb.get("2"))
+        self.assertTrue(self.tb.get("3"))
+        self.assertFalse(self.tb.get("4"))
 
 if __name__ == "__main__":
     print("Token bucket example")
